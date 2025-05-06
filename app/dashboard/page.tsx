@@ -1,4 +1,4 @@
-export default function DashboardPage() {
+export default async function DashboardPage() {
   return (
     <main className="p-10 text-center">
       <h1 className="text-4xl font-bold mb-4">대시보드</h1>
