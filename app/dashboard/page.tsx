@@ -1,8 +1,18 @@
-export default async function DashboardPage() {
+import { redirect } from "next/navigation";
+import { auth } from "../lib/auth";
+
+export default async function Dashboard() {
+  const session = await auth();
+  console.log("session", session);
+
+  if (!session) {
+    redirect("/login");
+  }
   return (
     <main className="p-10 text-center">
-      <h1 className="text-4xl font-bold mb-4">대시보드</h1>
-      <p>로그인 후 볼 수 있는 대시보드</p>
+      <p className="text-3xl font-bold mb-4">
+        {session.user?.name}님 안녕하세요!
+      </p>
     </main>
   );
 }

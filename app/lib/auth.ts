@@ -1,6 +1,6 @@
+import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
-import { NextAuthConfig } from "next-auth";
 
 export const authConfig = {
   providers: [
@@ -11,14 +11,12 @@ export const authConfig = {
     Credentials({
       name: "Credentials",
       credentials: {
-        username: { label: "Uid", type: "text" },
+        uid: { label: "Uid", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (
-          credentials?.username === "admin" &&
-          credentials.password === "1234"
-        ) {
+        const { uid, password } = credentials;
+        if (uid === "admin" && password === "1234") {
           return {
             id: "1",
             name: "관리자",
@@ -34,4 +32,6 @@ export const authConfig = {
   },
   trustHost: true,
   secret: process.env.NEXTAUTH_SECRET,
-} satisfies NextAuthConfig;
+};
+
+export const { auth, handlers, signIn, signOut } = NextAuth(authConfig);
