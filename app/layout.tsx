@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "./components/header";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Bong Portfolio",
@@ -15,9 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="max-w-4xl mx-auto">
+      <body>
         <SessionProvider>
-          <Header />
+          <Toaster
+            position="top-center"
+            toastOptions={{ style: { fontSize: 12, fontWeight: 600 } }}
+          />
           {children}
         </SessionProvider>
       </body>
