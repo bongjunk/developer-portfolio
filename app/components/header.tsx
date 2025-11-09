@@ -19,7 +19,11 @@ const Header = () => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const isActive = (href: string) => pathname.startsWith(href);
+  // const isActive = (href: string) => pathname.startsWith(href);
+  const isActive = (href: string) => {
+    if ((href = "/")) return pathname === "/";
+    return pathname.startsWith(href);
+  };
 
   const links: NavLinkTypes[] = [
     { href: "/", label: "홈" },

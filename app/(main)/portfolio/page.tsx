@@ -12,7 +12,7 @@ type ExperiencesTypes = {
   project: string;
   stack: string[];
   responsibilities: string[];
-  achivements: string[];
+  achievements: string[];
 };
 
 type ProjectsTypes = {
@@ -24,6 +24,7 @@ export default function PortfolioPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // 인증체크
   useEffect(() => {
     if (status === "unauthenticated") {
       toast.error("로그인이 필요합니다.");
@@ -35,6 +36,7 @@ export default function PortfolioPage() {
     return <p className="text-center mt-20 text-gray-500">로딩 중...</p>;
   }
 
+  // 기술스택
   const skills: string[] = [
     "Next.js",
     "React",
@@ -47,11 +49,12 @@ export default function PortfolioPage() {
     "Zod",
   ];
 
-  const experiences: ExperiencesTypes = [
+  // 경력사항
+  const experiences: ExperiencesTypes[] = [
     {
-      company: "모빌리버스",
+      company: "애니드림오토서비스",
       role: "프론트엔드 개발자",
-      period: "2022.01 ~ 2024.11 (2년 10개월)",
+      period: "2022.01 ~ 2024.07 (2년 7개월)",
       project: "추심관리 및 지급명령 시스템",
       stack: ["Next.js", "NextAuth", "Typescript", "GraphQL", "Tailwind CSS"],
       responsibilities: [
@@ -61,7 +64,7 @@ export default function PortfolioPage() {
         "어드민 데이터 관리 UI (검색/정렬/페이지네이션) 구현",
         "사용자 입력 자동 저장 및 유효성 검증 로직 개발",
       ],
-      achivements: [
+      achievements: [
         "공통 컴포넌트화로 코드 중복률 40% 감소",
         "어드민 UI 최적화로 데이터 처리 속도 개선",
         "UX 개선으로 업무 효율 향상 및 유지보수성 강화",
@@ -69,23 +72,43 @@ export default function PortfolioPage() {
       ],
     },
     {
-      company: "개인 프로젝트",
-      role: "프론트엔드 개발",
-      period: "2025.02 ~ 진행 중",
-      project: "Next.js 인증 데모 & 포트폴리오 사이트",
-      stack: ["Next.js", "NextAuth", "Prisma", "Tailwind CSS"],
+      company: "모빌리버스",
+      role: "프론트엔드 개발자",
+      period: "2024.08 ~ 2024.11 (3개월)",
+      project: "추심관리 및 지급명령 시스템",
+      stack: ["Next.js", "NextAuth", "Typescript", "GraphQL", "Tailwind CSS"],
       responsibilities: [
-        "NextAuth v5 + Credentials/GitHub 로그인 구현",
-        "회원가입 폼 유효성 검사 및 사용자 DB 저장",
-        "보호 라우트 및 세션 기반 접근제어 구현",
-        "Tailwind 기반 UI 컴포넌트 제작",
+        "프론트엔드 전반 개발 (UI, 상태관리, 폼 검증 등)",
+        "JWT 인증 및 Axios 인터셉터 기반 통신 구조 설계",
+        "공통 컴포넌트화 (Input, Modal, Pagination 등)로 유지보수성 향상",
+        "어드민 데이터 관리 UI (검색/정렬/페이지네이션) 구현",
+        "사용자 입력 자동 저장 및 유효성 검증 로직 개발",
       ],
       achievements: [
-        "App Router 기반 인증 로직 완성",
-        "Vercel 배포 자동화 환경 구축 예정",
+        "공통 컴포넌트화로 코드 중복률 40% 감소",
+        "어드민 UI 최적화로 데이터 처리 속도 개선",
+        "UX 개선으로 업무 효율 향상 및 유지보수성 강화",
+        "백엔드/디자인 협업을 통한 UX 개선 및 프로세스 효율화",
       ],
     },
   ];
+
+  //   1) 프로젝트명: 모빌리버스 홈페이지 리뉴얼
+
+  // - 연계/소속회사 : 모빌리버스
+
+  // - 주요 업무 : 프론트엔드 담당
+
+  // - 담당 역할 : 투자정보 메뉴 개발 및 전체적인 유지보수 후 배포
+
+  // - 기술 스택 : - nextjs, typescript, tailwind css
+
+  // - 업무 기간 : 2023.05.23 ~ 2023.06.09 (약 1개월)
+
+  // - 개발 인원 : 5
+
+  // - 상세 내용 : 기존에 호스팅 되어있던 모빌리버스 홈페이지를 자체 개발
+  // 홈페이지 url : https://mobiliverse.co.kr/
 
   const projects: ProjectsTypes[] = [
     {
@@ -145,49 +168,49 @@ export default function PortfolioPage() {
           </div>
         </section>
 
-        {/* 경력 */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">경력 요약</h2>
-          <div className="rounded-lg border bg-white p-6 shadow-sm space-y-4">
-            <div>
-              <h3 className="font-bold text-lg">
-                프론트엔드 개발자 | (모빌리버스)
-              </h3>
-              <p className="text-sm text-gray-500">
-                2022.01 ~ 2024.11 (2년 10개월)
-              </p>
-            </div>
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">경력</h2>
+          <div className="space-y-6">
+            {experiences.map((exp) => (
+              <div
+                key={exp.company}
+                className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                  <h3 className="font-bold text-lg text-gray-900">
+                    {exp.role} | {exp.company}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1 sm:mt-0">
+                    {exp.period}
+                  </p>
+                </div>
 
-            <div className="space-y-2">
-              <h4 className="font-semibold">추심관리 및 지급명령 시스템</h4>
-              <p className="text-sm text-gray-600">
-                React + TypeScript 기반의 어드민/클라이언트 웹 구축 프로젝트
-              </p>
-            </div>
+                <div className="mt-3">
+                  <h4 className="font-semibold">{exp.project}</h4>
+                  <p className="text-sm text-gray-600 mt-1">
+                    기술 스택: {exp.stack.join(", ")}
+                  </p>
+                </div>
 
-            <div>
-              <h4 className="font-semibold mt-3">주요 역할</h4>
-              <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-                <li>프론트엔드 전반 개발 주도 (UI, 상태관리, 폼 검증 등)</li>
-                <li>JWT 인증 및 Axios 인터셉터 기반 통신 구조 설계</li>
-                <li>
-                  공통 컴포넌트화 (Input, Modal, Pagination 등)로 유지보수성
-                  향상
-                </li>
-                <li>어드민 데이터 관리 UI (검색/정렬/페이지네이션) 구현</li>
-                <li>사용자 입력 자동 저장 및 유효성 검증 로직 개발</li>
-              </ul>
-            </div>
+                <div className="mt-4">
+                  <h4 className="font-semibold">주요 역할</h4>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mt-1">
+                    {exp.responsibilities.map((res) => (
+                      <li key={res}>{res}</li>
+                    ))}
+                  </ul>
+                </div>
 
-            <div>
-              <h4 className="font-semibold mt-3">성과</h4>
-              <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-                <li>공통 컴포넌트화로 코드 중복률 40% 감소</li>
-                <li>입력 자동저장 기능 도입으로 사용자 에러율 감소</li>
-                <li>어드민 UI 최적화로 데이터 처리 속도 개선</li>
-                <li>백엔드/디자인 협업을 통한 UX 개선 및 프로세스 효율화</li>
-              </ul>
-            </div>
+                <div className="mt-4">
+                  <h4 className="font-semibold">성과</h4>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mt-1">
+                    {exp.achievements.map((ach) => (
+                      <li key={ach}>{ach}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
