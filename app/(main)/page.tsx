@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
@@ -31,34 +30,3 @@ export default function LandingPage() {
     </main>
   );
 }
-
-// export default function LandingPage() {
-//   return (
-//     <main className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
-// {/* 간단한 소개 */}
-// <h1 className="text-4xl font-bold mb-4">김봉준</h1>
-// <p className="text-gray-600 mb-8">
-//   프론트엔드 개발자 | Next.js 기반 인증 데모 프로젝트
-// </p>
-
-// {/* 로그인 버튼 */}
-// <a
-//   href="/login"
-//   className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
-// >
-//   로그인하기
-// </a>
-// <div className="flex flex-col gap-3">
-//   <a href="/login?method=github" className="btn bg-gray-800 text-white">
-//     GitHub 로그인
-//   </a>
-//   <a
-//     href="/login?method=credentials"
-//     className="btn bg-blue-600 text-white"
-//   >
-//     아이디/비밀번호 로그인
-//   </a>
-// </div>
-//     </main>
-//   );
-// }

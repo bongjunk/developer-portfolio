@@ -21,7 +21,7 @@ const Header = () => {
 
   // const isActive = (href: string) => pathname.startsWith(href);
   const isActive = (href: string) => {
-    if ((href = "/")) return pathname === "/";
+    if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };
 
@@ -57,9 +57,9 @@ const Header = () => {
     <header className="sticky top-0 z-30 w-full border-b bg-white shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
         {/* 로고 */}
-        <h1 className="text-base font-bold">
-          <Link href="/">Bong’s Portfolio</Link>
-        </h1>
+        <Link href="/" className="text-base font-bold">
+          Bong’s Portfolio
+        </Link>
 
         {/* 데스크탑 네비게이션 */}
         <nav className="hidden md:flex space-x-6">
@@ -67,7 +67,7 @@ const Header = () => {
             <Link
               key={href}
               href={href}
-              className={`transition-colors ${
+              className={`transition ${
                 isActive(href)
                   ? "font-bold text-blue-600"
                   : "text-gray-700 hover:text-gray-900"

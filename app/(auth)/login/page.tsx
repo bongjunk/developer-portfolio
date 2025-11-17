@@ -12,7 +12,7 @@ import Link from "next/link";
 import { GithubIcon } from "@/components/icons";
 
 const loginSchema = z.object({
-  id: z.string().min(1, "아이디를 입력해주세요."),
+  uid: z.string().min(1, "아이디를 입력해주세요."),
   password: z.string().min(1, "비밀번호를 입력해주세요."),
   rememberId: z.boolean(),
 });
@@ -23,13 +23,14 @@ const Page = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  const moveRef = useRef<boolean>(false);
 
   console.log(session, status);
 
   const methods = useForm<LoginTypes>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      id: "",
+      uid: "",
       password: "",
       rememberId: false,
     },
@@ -42,7 +43,7 @@ const Page = () => {
   useEffect(() => {
     const saveId = localStorage.getItem("saveId");
     if (saveId) {
-      setValue("id", saveId);
+      setValue("uid", saveId);
       setValue("rememberId", true);
       // 아이디 자동 세팅 후 비밀번호 input focus
       setTimeout(() => {
@@ -53,7 +54,8 @@ const Page = () => {
 
   // 로그인 성공 시 페이지 이동
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status === "authenticated" && !moveRef.current) {
+      moveRef.current = true;
       toast.success("로그인 성공!");
       router.push("/portfolio");
     }
@@ -63,18 +65,18 @@ const Page = () => {
     return <p>로딩중...</p>;
   }
 
-  const onSubmit = async ({ id, password }: LoginTypes) => {
-    console.log("data : ", id, password);
+  const onSubmit = async ({ uid, password }: LoginTypes) => {
+    console.log("data : ", uid, password);
 
     try {
       const res = await signIn("credentials", {
         redirect: false,
-        uid: id,
+        uid,
         password,
       });
 
       if (res?.error) {
-        methods.setError("id", {
+        methods.setError("uid", {
           type: "manual",
           message: "아이디 또는 비밀번호가 일치하지 않습니다.",
         });
@@ -82,17 +84,13 @@ const Page = () => {
         return;
       }
 
-      // rememberId
-      //   ? localStorage.setItem("saveId", id)
-      //   : localStorage.removeItem("saveId");
-      // rememberId 체크 시 localStorage에 저장
       if (rememberId) {
-        localStorage.setItem("saveId", id);
+        localStorage.setItem("saveUid", uid);
       } else {
-        localStorage.removeItem("saveId");
+        localStorage.removeItem("saveUid");
       }
     } catch (error) {
-      console.log(error);
+      console.log("로그인 에러 : ", error);
       toast.error("로그인 중 문제가 발생했습니다.");
     }
   };
@@ -114,7 +112,7 @@ const Page = () => {
               {/* 아이디 */}
               <div>
                 <label
-                  htmlFor="id"
+                  htmlFor="uid"
                   className="mb-2 block text-sm font-medium text-gray-700"
                 >
                   아이디
@@ -122,9 +120,9 @@ const Page = () => {
                 <Input
                   format="text"
                   placeholder="아이디를 입력해주세요"
-                  name="id"
+                  name="uid"
                   control={methods.control}
-                  error={methods.formState.errors.id}
+                  error={methods.formState.errors.uid}
                 />
               </div>
               {/* 비밀번호 */}

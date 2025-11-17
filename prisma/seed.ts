@@ -1,14 +1,17 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+
 const prisma = new PrismaClient();
 
 async function main() {
+  const hashed = await bcrypt.hash("1234", 10);
   await prisma.user.upsert({
     where: { email: "admin@example.com" },
     update: {},
     create: {
       email: "admin@example.com",
       name: "관리자",
-      password: "1234", // 임시 테스트용 비밀번호
+      password: hashed,
     },
   });
 }
