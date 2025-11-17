@@ -44,6 +44,13 @@ export default function RegisterForm() {
   const methods = useForm<RegisterFormTypes>({
     resolver: zodResolver(registerSchema),
     mode: "onTouched",
+    defaultValues: {
+      uid: "",
+      password: "",
+      confirmPassword: "",
+      name: "",
+      email: "",
+    },
   });
 
   const {
@@ -69,6 +76,7 @@ export default function RegisterForm() {
       toast.success("회원가입 성공! 로그인 해주세요.");
       router.push("/login");
     } catch (err) {
+      console.log("회원가입 에러 : ", err);
       toast.error("회원가입에 실패했습니다.");
     } finally {
       setLoading(false);

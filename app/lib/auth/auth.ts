@@ -3,16 +3,21 @@ import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../db/prisma";
-import type { Session, User } from "next-auth";
+import type { Session, User, Account } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import bcrypt from "bcryptjs";
+
+// type Credentials = {
+//   uid?: string;
+//   password?: string;
+// };
 
 export const authConfig: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHub({
-      clientId: process.env.GITHUB_ID!, // 깃허브 OAuth App Client ID
-      clientSecret: process.env.GITHUB_SECRET!, // 깃허브 OAuth App Secret
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
     }),
     Credentials({
       name: "Credentials",
@@ -54,7 +59,7 @@ export const authConfig: NextAuthConfig = {
     strategy: "jwt" as const,
   },
   pages: {
-    signIn: "/auth/login", // 보호 실패 시 이동할 페이지
+    signIn: "/auth/login",
     error: "/auth/login",
   },
   trustHost: true,
@@ -70,7 +75,7 @@ export const authConfig: NextAuthConfig = {
     async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
         token.id = user.id;
-        token.uid = user.uid;
+        token.uid = user.uid ?? null;
       }
       return token;
     },
@@ -87,34 +92,12 @@ export const authConfig: NextAuthConfig = {
       await handleUserUpdate("signIn", event);
     },
   },
-  // events: {
-  //   async createUser({ user }) {
-  //     // 계정 (provider) 정보 가져오기
-  //     const account = await prisma.account.findFirst({
-  //       where: { userId: user.id },
-  //     });
-
-  //     try {
-  //       const uid = account
-  //         ? `${account.provider}_${account.providerAccountId}`
-  //         : user.uid ?? `user_${user.id}`;
-
-  //       const updated = await prisma.user.update({
-  //         where: { id: user.id },
-  //         data: { uid },
-  //       });
-  //       console.log("[NextAuth event] user.uid updated:", updated.uid);
-  //     } catch (err) {
-  //       console.error("[NextAuth event] uid update failed:", err);
-  //     }
-  //   },
-  // },
 };
 
-// ✅ 공용 핸들러
+// uid 자동 동기화
 async function handleUserUpdate(
   eventName: string,
-  { user, account }: { user: User; account?: any }
+  { user, account }: { user: User; account?: Account | null }
 ) {
   try {
     if (!user?.id) return;
