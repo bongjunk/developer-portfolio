@@ -41,18 +41,18 @@ const Page = () => {
 
   // localStorage에서 아이디 불러오기
   useEffect(() => {
-    const saveId = localStorage.getItem("saveId");
-    if (saveId) {
-      setValue("uid", saveId);
+    const saveUid = localStorage.getItem("saveUid");
+    if (saveUid) {
+      setValue("uid", saveUid);
       setValue("rememberId", true);
-      // 아이디 자동 세팅 후 비밀번호 input focus
+      // 아이디 자동 세팅 후 비밀번호 자동 포커스
       setTimeout(() => {
         passwordRef.current?.focus();
       }, 100);
     }
   }, [setValue]);
 
-  // 로그인 성공 시 페이지 이동
+  // 로그인 성공 시 페이지 이동 (중복 이동 방지)
   useEffect(() => {
     if (status === "authenticated" && !moveRef.current) {
       moveRef.current = true;
@@ -77,6 +77,10 @@ const Page = () => {
 
       if (res?.error) {
         methods.setError("uid", {
+          type: "manual",
+          message: "아이디 또는 비밀번호가 일치하지 않습니다.",
+        });
+        methods.setError("password", {
           type: "manual",
           message: "아이디 또는 비밀번호가 일치하지 않습니다.",
         });
