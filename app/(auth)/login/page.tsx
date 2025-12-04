@@ -41,18 +41,18 @@ const Page = () => {
 
   // localStorage에서 아이디 불러오기
   useEffect(() => {
-    const saveId = localStorage.getItem("saveId");
-    if (saveId) {
-      setValue("uid", saveId);
+    const saveUid = localStorage.getItem("saveUid");
+    if (saveUid) {
+      setValue("uid", saveUid);
       setValue("rememberId", true);
-      // 아이디 자동 세팅 후 비밀번호 input focus
+      // 아이디 자동 세팅 후 비밀번호 자동 포커스
       setTimeout(() => {
         passwordRef.current?.focus();
       }, 100);
     }
   }, [setValue]);
 
-  // 로그인 성공 시 페이지 이동
+  // 로그인 성공 시 페이지 이동 (중복 이동 방지)
   useEffect(() => {
     if (status === "authenticated" && !moveRef.current) {
       moveRef.current = true;
@@ -80,6 +80,10 @@ const Page = () => {
           type: "manual",
           message: "아이디 또는 비밀번호가 일치하지 않습니다.",
         });
+        methods.setError("password", {
+          type: "manual",
+          message: "아이디 또는 비밀번호가 일치하지 않습니다.",
+        });
         toast.error("아이디나 비밀번호가 일치하지 않습니다.");
         return;
       }
@@ -97,9 +101,9 @@ const Page = () => {
 
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+      <div className="flex min-h-[85vh] justify-center items-center bg-neutral-50 px-4">
         <FormProvider {...methods}>
-          <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg rounded-2xl bg-white p-8 shadow-md">
+          <div className="w-full max-w-md rounded-2xl bg-white p-10 shadow-lg">
             <form
               onSubmit={methods.handleSubmit(onSubmit)}
               className="space-y-6"
