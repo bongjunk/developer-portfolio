@@ -26,7 +26,10 @@ const registerSchema = z
       .regex(/[0-9]/, "비밀번호에 숫자가 포함되어야 합니다."),
     confirmPassword: z.string().min(1, "비밀번호 확인을 입력해주세요."),
     name: z.string().optional(),
-    email: z.email({ message: "올바른 이메일 형식이 아닙니다." }).optional(),
+    email: z
+      .email({ message: "올바른 이메일 형식이 아닙니다." })
+      .optional()
+      .or(z.literal("")),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "비밀번호가 일치하지 않습니다.",
@@ -63,8 +66,7 @@ export default function RegisterForm() {
     console.log("data", data);
     try {
       setLoading(true);
-      const { confirmPassword, ...rest } = data;
-      console.log(confirmPassword, rest);
+      const { confirmPassword: _, ...rest } = data;
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

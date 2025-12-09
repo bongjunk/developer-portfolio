@@ -13,6 +13,13 @@
 # testing
 /coverage
 
+# prisma
+/prisma/dev.db
+/prisma/dev.db-journal
+/prisma/.env
+/prisma/migrations/
+/prisma/seed.ts
+
 # next.js
 /.next/
 /out/

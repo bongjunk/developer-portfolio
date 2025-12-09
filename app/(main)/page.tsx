@@ -6,9 +6,9 @@ export default function LandingPage() {
   const router = useRouter();
 
   return (
-    <main className="flex items-center justify-center flex-col max-w-3xl mx-auto px-4 py-20 text-center space-y-10">
+    <main className="flex min-h-screen items-center justify-start flex-col px-6 text-center space-y-10">
       {/* 소개 */}
-      <section className="text-center space-y-4">
+      <section className="space-y-4">
         <h1 className="text-4xl font-bold text-gray-900">김봉준</h1>
         <p className="text-gray-600 text-base">
           프론트엔드 개발자 | 사용자 경험을 고민하는 UI 개발
