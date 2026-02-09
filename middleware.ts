@@ -4,19 +4,19 @@ import { NextResponse } from "next/server";
 export default auth((req) => {
   const { nextUrl } = req;
   const session = req.auth;
-  const protectedPaths = ["/portfolio"];
+  const authPaths = ["/login", "/register"];
 
-  const isProtected = protectedPaths.some((path) =>
-    nextUrl.pathname.startsWith(path)
+  const isAuthPage = authPaths.some((path) =>
+    nextUrl.pathname.startsWith(path),
   );
 
-  if (!session && isProtected) {
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+  if (isAuthPage && session) {
+    return NextResponse.redirect(new URL("/portfolio", req.url));
   }
 
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/portfolio/:path*"],
+  matcher: ["/login/:path*", "/register/:path*"],
 };
