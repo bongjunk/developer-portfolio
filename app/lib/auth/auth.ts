@@ -26,7 +26,7 @@ export const authConfig: NextAuthConfig = {
         password: { label: "비밀번호", type: "password" },
       },
       async authorize(
-        credentials: Partial<Record<"uid" | "password", unknown>>
+        credentials: Partial<Record<"uid" | "password", unknown>>,
       ): Promise<User | null> {
         if (!credentials?.uid || !credentials?.password) {
           throw new Error("아이디와 비밀번호를 입력해주세요.");
@@ -44,7 +44,7 @@ export const authConfig: NextAuthConfig = {
         // 비밀번호 검증
         const isValid = await bcrypt.compare(
           credentials.password as string,
-          user.password!
+          user.password!,
         );
 
         if (!isValid) {
@@ -80,7 +80,7 @@ export const authConfig: NextAuthConfig = {
       return token;
     },
   },
-  // ✅ 모든 상황에서 uid 업데이트 로직 실행
+  // 모든 상황에서 uid 업데이트 로직 실행
   events: {
     async createUser(event) {
       await handleUserUpdate("createUser", event);
@@ -97,20 +97,20 @@ export const authConfig: NextAuthConfig = {
 // uid 자동 동기화
 async function handleUserUpdate(
   eventName: string,
-  { user, account }: { user: User; account?: Account | null }
+  { user, account }: { user: User; account?: Account | null },
 ) {
   try {
     if (!user?.id) return;
     console.log(
       `[NextAuth event] ${eventName}:`,
-      account?.provider ?? "credentials"
+      account?.provider ?? "credentials",
     );
 
     // uid 생성 규칙 통일
     const uid =
       account?.provider && account?.providerAccountId
         ? `${account.provider}_${account.providerAccountId}`
-        : user.uid ?? `user_${user.id}`;
+        : (user.uid ?? `user_${user.id}`);
 
     const updated = await prisma.user.update({
       where: { id: user.id },

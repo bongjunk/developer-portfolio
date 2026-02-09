@@ -16,42 +16,46 @@ type NavLinkTypes = {
 
 const Header = () => {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  // const isActive = (href: string) => pathname.startsWith(href);
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };
 
+  const isAuthenticated = status === "authenticated";
+
+  const userName = session?.user?.name ?? session?.user?.email ?? "데모 유저";
+  const userImage = session?.user?.image;
+
   const links: NavLinkTypes[] = [
     { href: "/", label: "홈" },
-    ...(session
-      ? [{ href: "/portfolio", label: "포트폴리오" }]
-      : [{ href: "/login", label: "로그인" }]),
+    { href: "/portfolio", label: "포트폴리오" },
   ];
 
-  // 로그아웃 핸들러
-  const handleSignOutClick = (): void => {
-    toast.success("로그아웃 되었습니다.");
-    signOut({ callbackUrl: "/login" });
-  };
-
   const toggleMenu = () => setIsOpen((prev) => !prev);
-
   // 모바일 메뉴 닫기 핸들러
   const handleCloseClick = (): void => {
     setIsOpen(false);
+  };
+
+  // 로그아웃 핸들러
+  const handleSignOutClick = async () => {
+    toast.success("로그아웃 되었습니다.");
+    await signOut({ callbackUrl: "/" });
+  };
+
+  // 모바일 로그아웃 핸들러
+  const handleMobileSignOutClick = async () => {
+    handleCloseClick();
+    await handleSignOutClick();
   };
 
   // 모바일 메뉴 내 이벤트 버블링 방지
   const handleStopPropagation = (e: MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation();
   };
-
-  const userName = session?.user?.name ?? session?.user?.email ?? "User";
-  const userImage = session?.user?.image;
 
   return (
     <header className="sticky top-0 z-30 w-full border-b bg-white shadow-sm">
@@ -62,7 +66,7 @@ const Header = () => {
         </Link>
 
         {/* 데스크탑 네비게이션 */}
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden md:flex md:items-center space-x-6">
           {links.map(({ href, label }) => (
             <Link
               key={href}
@@ -76,8 +80,9 @@ const Header = () => {
               {label}
             </Link>
           ))}
+          {/* 상태 영역 */}
           {/* 로그아웃 버튼 */}
-          {session && (
+          {isAuthenticated ? (
             <div className="flex items-center space-x-3">
               {userImage ? (
                 <Image
@@ -102,6 +107,13 @@ const Header = () => {
                 로그아웃
               </button>
             </div>
+          ) : (
+            <Link
+              href="/login"
+              className={`transition text-gray-700 hover:text-gray-900`}
+            >
+              로그인
+            </Link>
           )}
         </nav>
 
@@ -118,7 +130,7 @@ const Header = () => {
       {/* 모바일 메뉴 (오버레이) */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-40"
+          className="fixed md:hidden inset-0 z-40 bg-black bg-opacity-40"
           onClick={handleCloseClick}
         >
           <nav
@@ -130,14 +142,14 @@ const Header = () => {
             {/* 닫기 버튼 (햄버거 위치 동일) */}
             <button
               onClick={handleCloseClick}
-              className="absolute top-4 right-4 p-2 rounded-md hover:bg-gray-100 focus:outline-none"
+              className="absolute top-3 right-4 p-2 rounded-md hover:bg-gray-100 focus:outline-none"
               aria-label="Close menu"
             >
               <CloseIcon />
             </button>
 
             {/* 모바일 사용자 정보 */}
-            {session && (
+            {isAuthenticated && (
               <div className="flex items-center space-x-3 mb-6 mt-8">
                 {userImage ? (
                   <Image
@@ -176,17 +188,23 @@ const Header = () => {
                 </li>
               ))}
               {/* 로그아웃 버튼 */}
-              {session && (
+              {isAuthenticated ? (
                 <li>
                   <button
-                    onClick={() => {
-                      handleCloseClick();
-                      handleSignOutClick();
-                    }}
+                    onClick={handleMobileSignOutClick}
                     className="w-full text-left block rounded-md px-3 py-2 text-sm font-medium text-red-500 hover:bg-gray-100"
                   >
                     로그아웃
                   </button>
+                </li>
+              ) : (
+                <li>
+                  <Link
+                    href="/login"
+                    className={`block rounded-md px-3 py-2 text-sm font-medium transition text-gray-700 hover:bg-gray-100`}
+                  >
+                    로그인
+                  </Link>
                 </li>
               )}
             </ul>
