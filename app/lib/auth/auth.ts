@@ -59,8 +59,8 @@ export const authConfig: NextAuthConfig = {
     strategy: "jwt" as const,
   },
   pages: {
-    signIn: "/auth/login",
-    error: "/auth/login",
+    signIn: "/login",
+    error: "/login",
   },
   trustHost: true,
   secret: process.env.NEXTAUTH_SECRET,
