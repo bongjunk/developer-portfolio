@@ -88,9 +88,6 @@ export const authConfig: NextAuthConfig = {
     async linkAccount(event) {
       await handleUserUpdate("linkAccount", event);
     },
-    async signIn(event) {
-      await handleUserUpdate("signIn", event);
-    },
   },
 };
 
@@ -101,23 +98,15 @@ async function handleUserUpdate(
 ) {
   try {
     if (!user?.id) return;
-    console.log(
-      `[NextAuth event] ${eventName}:`,
-      account?.provider ?? "credentials",
-    );
 
-    // uid 생성 규칙 통일
-    const uid =
-      account?.provider && account?.providerAccountId
-        ? `${account.provider}_${account.providerAccountId}`
-        : (user.uid ?? `user_${user.id}`);
+    if (!account || account.provider === "credentials") return;
 
-    const updated = await prisma.user.update({
+    const uid = `${account.provider}_${account.providerAccountId}`;
+
+    await prisma.user.update({
       where: { id: user.id },
       data: { uid },
     });
-
-    console.log(`[NextAuth] uid synced -> ${updated.uid}`);
   } catch (error) {
     console.error(`[NextAuth] ${eventName} uid sync failed:`, error);
   }
