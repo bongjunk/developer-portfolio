@@ -27,8 +27,8 @@ const Header = () => {
   const isAuthenticated = status === "authenticated";
 
   const userName =
+    session?.user?.uid ??
     session?.user?.name ??
-    session?.user.uid ??
     session?.user?.email ??
     "데모 유저";
   const userImage = session?.user?.image;

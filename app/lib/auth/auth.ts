@@ -7,11 +7,6 @@ import type { Session, User, Account } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import bcrypt from "bcryptjs";
 
-// type Credentials = {
-//   uid?: string;
-//   password?: string;
-// };
-
 export const authConfig: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
   providers: [
