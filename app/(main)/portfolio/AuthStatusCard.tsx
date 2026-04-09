@@ -7,13 +7,17 @@ const AuthStatusCard = () => {
 
   const inAuth = status === "authenticated";
 
-  const displayName = inAuth ? (session.user?.name ?? "User") : "Demo User";
+  const userName =
+    session?.user?.uid ??
+    session?.user?.name ??
+    session?.user?.email ??
+    "데모 유저";
 
   return (
     <>
       <div className="flex items-center justify-between rounded-xl border bg-white p-4 shadow-sm">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">{displayName}</h2>
+          <h2 className="text-lg font-semibold text-gray-900">{userName}</h2>
           <p className="text-sm text-gray-500">
             {inAuth
               ? "인증된 사용자로 로그인 상태입니다."

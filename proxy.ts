@@ -1,20 +1,21 @@
 import { auth } from "@/lib/auth/auth";
 import { NextResponse } from "next/server";
 
-export default auth((req) => {
-  const { nextUrl } = req;
-  const session = req.auth;
-  const authPaths = ["/login", "/register"];
+const AUTH_PATHS = ["/login", "/register"];
+const REDIRECT_LOGIN_PATH = "/portfolio";
 
-  const isAuthPage = authPaths.some((path) =>
+export default auth((req) => {
+  const { nextUrl, auth: session } = req;
+
+  const isAuthPage = AUTH_PATHS.some((path) =>
     nextUrl.pathname.startsWith(path),
   );
 
   if (isAuthPage && session) {
-    return NextResponse.redirect(new URL("/portfolio", req.url));
+    return NextResponse.redirect(new URL(REDIRECT_LOGIN_PATH, req.url));
   }
 
-  return NextResponse.next();
+  return;
 });
 
 export const config = {
