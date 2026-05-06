@@ -1,13 +1,11 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
 import AuthDemoBanner from "./AuthDemoBanner";
 import AuthStatusCard from "./AuthStatusCard";
 
 type ExperiencesTypes = {
+  id: string;
   company: string;
   role: string;
   period: string;
@@ -29,64 +27,100 @@ export default function PortfolioPage() {
     return <p className="text-center mt-20 text-gray-500">로딩 중...</p>;
   }
 
-  const isAuthenticated = status === "authenticated";
-
   // 기술스택
   const skills: string[] = [
     "Next.js",
     "React",
     "TypeScript",
+    "NextAuth",
+    "JWT / Session",
+    "React Hook Form",
+    "Zod",
     "Tailwind CSS",
     "Styled-Components",
+    "SCSS",
     "Node.js",
-    "NextAuth",
     "GraphQL",
     "Recoil",
-    "Zod",
+    "Git",
   ];
 
   // 경력사항
   const experiences: ExperiencesTypes[] = [
     {
-      company: "애니드림오토서비스 / 모빌리버스",
+      id: "mobiliverse-gama-admin",
+      company: "모빌리버스",
       role: "프론트엔드 개발자",
-      period: "2022.01 ~ 2024.11",
-      project: "차량관리 ERP 가마(GAMA), 연동 어드민 페이지 개발",
+      period: "2024.08 ~ 2024.11",
+      project: "차량관리 ERP(GAMA) 어드민 페이지 프론트엔드 개발",
+      stack: [
+        "Next.js",
+        "NextAuth",
+        "Typescript",
+        "React Hook Form",
+        "GraphQL",
+        "Recoil",
+        "Tailwind CSS",
+        "Zod",
+      ],
+      responsibilities: [
+        "Next.js 기반 어드민 UI 개발 및 유지보수",
+        "추심관리 메뉴 UI 및 데이터 처리 로직 개발",
+        "API 연동을 통한 데이터 조회/등록/수정(CRUD) 화면 구현",
+        "NextAuth 기반 로그인/세션 처리 및 보호 페이지 접근 제어 구현",
+        "React Hook Form과 TypeScript 기반 폼 데이터 구조 설계",
+      ],
+      achievements: [
+        "데이터 관리 화면 중심의 어드민 UX를 안정적으로 제공하며 운영 요구사항 반영",
+        "기존 코드 구조 개선과 공통 컴포넌트 분리를 통해 재사용성 및 유지보수성 향상",
+        "운영 메뉴 단위 기능 개발을 통해 실제 서비스 유지보수 및 배포 경험 확보",
+      ],
+    },
+    {
+      id: "anydream-gama-service",
+      company: "애니드림오토서비스",
+      role: "프론트엔드 개발자",
+      period: "2022.01 ~ 2024.08",
+      project: "차량관리 ERP(GAMA) 서비스 및 운영 메뉴 프론트엔드 개발",
       stack: [
         "Next.js",
         "NextAuth",
         "Typescript",
         "GraphQL",
         "Recoil",
+        "React Hook Form",
         "Tailwind CSS",
-        "ZOD",
+        "Zod",
       ],
       responsibilities: [
-        "차량관리 ERP 가마(GAMA) 서비스 기능/화면 개발 참여",
-        "메뉴 단위 기능 개발 및 유지보수 (고객센터 등 운영 메뉴)",
-        "GAMA ERP와 연동되는 어드민 시스템 UI 개발",
-        "어드민 페이지 NextAuth 기반 인증 흐름 구현 (로그인/세션 처리, 보호 페이지 접근 제어)",
-        "추심관리(채권/상환 관련) 메뉴 UI 및 데이터 등록, 조회/처리 화면 구현",
-        "폼 입력/검증 및 공통 UI 컴포넌트 기반으로 화면 구성",
+        "차량관리 ERP(GAMA) 서비스 프론트엔드 개발",
+        "API 연동 기반 데이터 조회/등록/수정(CRUD) 화면 구현",
+        "고객센터 등 운영 메뉴 기능 개발 및 유지보수",
+        "메뉴 단위 UI 및 상태 관리 로직 구현",
+        "기존 서비스 UI 개선 및 코드 리팩토링",
+        "React Hook Form과 TypeScript 기반 폼 데이터 구조 설계",
       ],
       achievements: [
-        "ERP(GAMA) 연동 환경에서 인증/세션 기반 사용자 흐름을 구현",
-        "운영에 필요한 핵심 메뉴(고객센터, 추심관리 등)를 기능 단위로 적용 및 테스트",
-        "데이터 관리 화면(목록/상세/검색 등) 중심의 어드민 UX를 안정적으로 제공하며 운영 요구사항 반영",
+        "데이터 관리 화면 중심의 어드민 UX를 안정적으로 제공하며 운영 요구사항 반영",
+        "기존 코드 구조 개선과 공통 컴포넌트 분리를 통해 재사용성 및 유지보수성 향상",
+        "운영 메뉴 단위 기능 개발을 통해 사내 테스트 서비스 유지보수 및 배포 경험 확보",
       ],
     },
     {
+      id: "anydream-homepage-renewal",
       company: "애니드림오토서비스",
       role: "프론트엔드 개발자",
       period: "2023.05.23 ~ 2023.06.09",
-      project: "모빌리버스 홈페이지 리뉴얼",
+      project: "사내 홈페이지 리뉴얼",
       stack: ["Next.js", "Typescript", "Tailwind CSS"],
       responsibilities: [
-        "투자정보 메뉴 리뉴얼",
-        "페이지/컴포넌트 유지보수 및 배포",
+        "기존 투자정보 메뉴 UI 리뉴얼",
+        "페이지 및 컴포넌트 유지보수",
+        "운영 배포 대응",
       ],
       achievements: [
-        "서비스 반영 및 운영 배포 경험",
+        "기존 페이지 구조를 개선하여 콘텐츠 전달력과 유지보수성을 향상",
+        "실제 서비스 반영 및 운영 배포 경험",
         "홈페이지: mobiliverse.co.kr",
       ],
     },
@@ -94,9 +128,9 @@ export default function PortfolioPage() {
 
   const projects: ProjectsTypes[] = [
     {
-      title: "포트폴리오 웹사이트",
+      title: "NextAuth 기반 인증 포트폴리오",
       description:
-        "Next.js + Tailwind + NextAuth v5 기반 반응형 개인 포트폴리오",
+        "Next.js App Router 환경에서 Credentials/GitHub OAuth 로그인, JWT/Session 커스터마이징, middleware(proxy) 기반 접근 제어를 구현한 포트폴리오 프로젝트",
     },
   ];
 
@@ -114,7 +148,7 @@ export default function PortfolioPage() {
             프론트엔드 개발자 · 실무 흐름을 구현하는 UI 개발
           </p>
           <p className="text-sm text-gray-500">
-            Next.js · TypeScript · UI/UX · 인증 시스템
+            Next.js · TypeScript · UI/UX · Authentication
           </p>
         </section>
 
@@ -138,21 +172,21 @@ export default function PortfolioPage() {
         {/* 경력 */}
         <section>
           <h2 className="text-xl font-semibold mb-4 text-gray-900">경력</h2>
-          <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h3 className="font-bold text-gray-900">
-              애니드림오토서비스 / 모빌리버스
-            </h3>
-            <p className="text-sm text-gray-600 mt-1">
-              프론트엔드 개발자 (2022.01 ~ 2024.11)
-            </p>
-            <ul className="list-disc list-inside text-sm text-gray-700 mt-3 space-y-1">
-              <li>차량관리 ERP 가마(GAMA) 서비스 화면 및 기능 개발 참여</li>
-              <li>
-                GAMA ERP 연동 어드민 시스템에서 로그인/세션 기반 접근 제어 구현
-              </li>
-              <li>추심관리 등 운영 핵심 메뉴의 등록/조회/처리 UI 개발</li>
-              <li>메뉴 단위 기능 개발 및 유지보수 (고객센터, 투자정보 등)</li>
-            </ul>
+          <div className="space-y-3">
+            {experiences?.slice(0, 2).map((exp) => (
+              <div
+                key={`${exp.company}-${exp.project}-${exp.period}`}
+                className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                  <div>
+                    <h3 className="font-bold text-gray-900">{exp.company}</h3>
+                    <p className="text-sm text-gray-600 mt-1">{exp.role}</p>
+                  </div>
+                  <p className="text-sm text-gray-500">{exp.period}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -163,7 +197,7 @@ export default function PortfolioPage() {
           <div className="space-y-6">
             {experiences.map((exp) => (
               <div
-                key={exp.company}
+                key={exp.id}
                 className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -185,8 +219,10 @@ export default function PortfolioPage() {
                 <div className="mt-4">
                   <h4 className="font-semibold">주요 역할</h4>
                   <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mt-1">
-                    {exp.responsibilities.map((res) => (
-                      <li key={res}>{res}</li>
+                    {exp.responsibilities.map((res, idx) => (
+                      <li key={`${exp.project}-responsibility-${idx}`}>
+                        {res}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -194,8 +230,8 @@ export default function PortfolioPage() {
                 <div className="mt-4">
                   <h4 className="font-semibold">결과</h4>
                   <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mt-1">
-                    {exp.achievements.map((ach) => (
-                      <li key={ach}>{ach}</li>
+                    {exp.achievements.map((ach, idx) => (
+                      <li key={`${exp.project}-achievement-${idx}`}>{ach}</li>
                     ))}
                   </ul>
                 </div>
